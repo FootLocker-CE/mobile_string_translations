@@ -9,11 +9,13 @@ From there, they will be picked up and deployed via Fastly to endpoints that the
 
 #### string-archiver utility
 
-This is a command line utility that lives in the `scripts/strings_archiver` folder under the iOS project root. Its purpose is to create one or more archive files for each banner that be added to the repository mentioned above. In order to create the archives for all the banners, you can run
+This is a command line utility that lives in the `scripts` folder under the project root. Its purpose is to create an archive file for each banner that can be added to the repository mentioned above. In order to create the archives for all the banners, you can run
 ```
-strings-archiver --all
+strings-archiver --all --appver "x.y.z"
 ```
-from the command line and it will create a folder named `archived_strings` that will contain an archive for each banner using the banner id as the filename:
+from the command line. Where the --appver parameter is the version number of the current live app or app to be published. Any apps that have this version number or *earlier* will be able to use the string archives created. If an app has a *higher* version number than is specified, then it will ignore the archives. This is done to prevent the case where a newer version of the app would pick up an older string archive.
+
+This will create a folder named `archived_strings` that will contain an archive for each banner using the banner id as the filename:
 ```
 fl = FootLocker
 ch = Champs
@@ -21,4 +23,5 @@ kfl = Kids FootLocker
 flca = FootLocker Canada
 fleu = FootLocker Europe
 ```
+
 Take these archives and commit them to this GitHub repository. A job will run that will pick up the latest commits and send them to the Fastly servers.
